@@ -15,9 +15,12 @@ export function activate(context: vscode.ExtensionContext) {
     markdownSettingCommandName,
     markdownSettingCb
   );
-
+  const testCommand = vscode.commands.registerCommand('test', () => {
+    vscode.window.showInformationMessage('this is a test');
+  });
   context.subscriptions.push(uploadImage);
   context.subscriptions.push(markdownSettings);
+  context.subscriptions.push(testCommand);
   // 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
 }
 

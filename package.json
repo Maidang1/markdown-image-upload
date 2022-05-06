@@ -24,8 +24,22 @@
         "command": "markdown-setting",
         "title": "Markdown Setting",
         "category": "markdown"
+      },
+      {
+        "command": "test",
+        "title": "Markdown test",
+        "category": "markdown"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "upload-image",
+          "group": "group1",
+          "when": "editorHasSelection"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
