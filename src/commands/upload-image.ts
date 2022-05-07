@@ -1,5 +1,6 @@
 import { Octokit } from 'octokit';
 import * as vscode from 'vscode';
+import { CDN_URL } from '../const';
 import { checkIsImg, getFileName, imagePathToBase64 } from '../utils';
 export const uploadImageCommand = (context: vscode.ExtensionContext) => {
   return [
@@ -13,7 +14,7 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
         auth: token,
       });
       if (activeTextEditor) {
-        const { document, selection } = activeTextEditor;
+        const { document, selection, edit } = activeTextEditor;
         const text = document.getText(selection);
         // 判断选中的链接是不是图片
         if (checkIsImg(text)) {
@@ -33,7 +34,15 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
                   content,
                 }
               );
-              return res.data.content?.path;
+              // return res.data.content?.path;
+              edit((editBuilder) => {
+                if (res.data.content?.path) {
+                  editBuilder.replace(
+                    selection,
+                    `${CDN_URL}/${username}/${repo}/${res.data.content.path}`
+                  );
+                }
+              });
             } catch (e: any) {
               vscode.window.showErrorMessage(e);
             }
