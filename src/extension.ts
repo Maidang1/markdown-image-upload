@@ -1,19 +1,14 @@
+import * as glob from 'glob';
 import * as vscode from 'vscode';
 import { uploadImageCommand } from '././commands/upload-image';
 import { markdownSettingCommand } from './commands/markdown-settings';
 
 export function activate(context: vscode.ExtensionContext) {
-  const { command: uploadImageCommandName, cb: uploadImageCb } =
-    uploadImageCommand;
-  const { command: markdownSettingCommandName, cb: markdownSettingCb } =
-    markdownSettingCommand(context);
   const uploadImage = vscode.commands.registerCommand(
-    uploadImageCommandName,
-    uploadImageCb
+    ...markdownSettingCommand(context)
   );
   const markdownSettings = vscode.commands.registerCommand(
-    markdownSettingCommandName,
-    markdownSettingCb
+    ...uploadImageCommand(context)
   );
   const testCommand = vscode.commands.registerCommand('test', () => {
     vscode.window.showInformationMessage('this is a test');
@@ -22,6 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(markdownSettings);
   context.subscriptions.push(testCommand);
   // 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
+  // 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
 }
 
 export function deactivate() {}

@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
+
 const commonValidate = (value: string) => {
   if (!value || value.trim() === '') {
     return '';
   }
 };
 export const markdownSettingCommand = (context: vscode.ExtensionContext) => {
-  return {
-    command: 'markdown-setting',
-    cb: async () => {
+  return [
+    'markdown-setting',
+    async () => {
       let username = await vscode.window.showInputBox({
         placeHolder: '请输入你的github用户名',
         validateInput: commonValidate,
@@ -37,11 +38,10 @@ export const markdownSettingCommand = (context: vscode.ExtensionContext) => {
         username = context.globalState.get('username');
         repo = context.globalState.get('repo');
         token = context.globalState.get('token');
-
         vscode.window.showInformationMessage(
           `设置成功，用户名：${username}，仓库名：${repo}，token：${token}`
         );
       }
     },
-  };
+  ] as const;
 };
