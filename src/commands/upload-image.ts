@@ -1,7 +1,7 @@
-import { Octokit } from 'octokit';
 import * as vscode from 'vscode';
 import { CDN_URL } from '../const';
 import { checkIsImg, getFileName, imagePathToBase64 } from '../utils';
+import { createInstance } from '../utils/request';
 export const uploadImageCommand = (context: vscode.ExtensionContext) => {
   return [
     'upload-image',
@@ -10,9 +10,7 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
       const username = context.globalState.get('username') as string;
       const repo = context.globalState.get('repo') as string;
       const token = context.globalState.get('token') as string;
-      const instance = new Octokit({
-        auth: token,
-      });
+      const instance = createInstance(token);
       if (activeTextEditor) {
         const { document, selection, edit } = activeTextEditor;
         const text = document.getText(selection);

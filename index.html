@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .image-container-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .image-container {
+      display: flex;
+      width: 220px;
+      height: 220px;
+      flex-direction: column;
+      align-items: center;
+    }
+    .image-url {
+      width: 200px;
+      height: 200px;
+    }
+    .image-url img {
+      width: 200px;
+      height: 200px;
+    }
+    .button-group {
+      font-size: 12px;
+    }
+    .button-group span {
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script>
+    const root = document.querySelector('#root');
+
+    const urls = new Array(10).fill(
+      '/Users/bytedance/Downloads/2022.05.04-18.02.18.png'
+    );
+
+    const renderHtml = () => {
+      const handleDelete = () => {
+        console.log('this is delete');
+      };
+      const handleCopy = () => {
+        console.log('this is copy');
+      };
+      const res = `${urls.map((url) => {
+        return `
+                  <div class="image-container">
+                    <div class="image-url">
+                      <img src="${url}" alt="img">
+                    </div>
+                    <div class="button-group">
+                      <span class="delete" data-url="${url}" data-type="delete">删除</span>
+                      <span class="copy" data-url="${url}" data-type="copy">复制链接</span>
+                    </div>
+                  </div>
+                `;
+      })}`;
+      return `<div class="image-container-wrapper">${res}</div>`;
+    };
+    root.innerHTML = renderHtml();
+
+    root.addEventListener('click', (e) => {
+      console.log(e.target.dataset);
+      const dataset = e.target.dataset;
+      window.customEvent = e;
+    });
+  </script>
+</html>

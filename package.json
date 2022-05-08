@@ -30,6 +30,11 @@
         "command": "test",
         "title": "Markdown test",
         "category": "markdown"
+      },
+      {
+        "command": "markdown-image-preview",
+        "title": "Markdown Image Preview",
+        "category": "markdown"
       }
     ],
     "menus": {

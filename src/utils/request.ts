@@ -1,20 +1,6 @@
-// import axios from 'axios';
-
-// const instance = axios.create({
-//   baseURL: 'https://api.github.com',
-//   headers: {
-//     Authorization: 'token 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',
-//     Accept: 'application/vnd.github.v3+json',
-//   },
-// });
-
-// export const createRepo = (name: string) => {
-//   const res = instance.post('/user/repos', {
-//     name: 'image_repo',
-//   });
-// };
-
 import { Octokit } from 'octokit';
+import { CDN_URL } from '../const';
+import { IUrl } from '../typings';
 
 const instance = null;
 
@@ -28,40 +14,60 @@ export const createInstance = (token: string) => {
   });
 };
 
-// export const genRequest = (instance: Octokit) => ({
-//   /** 创建一个仓库 */
-//   createRepo: async ({ owner, repo }: { owner: string; repo: string }) => {
-//     await instance.request('PATCH /repos/{owner}/{repo}', {
-//       owner,
-//       repo,
-//       name: repo,
-//       homepage: 'https://github.com',
-//       private: false,
-//     });
-//   },
+export const getRepoContent = async (
+  instance: Octokit,
+  username: string,
+  repo: string
+) => {
+  const { data } = await instance.request(
+    'GET /repos/{owner}/{repo}/contents/{path}',
+    {
+      owner: username,
+      repo,
+      path: 'images',
+    }
+  );
 
-//   /** 上传图片 */
-//   uploadImage: async ({
-//     owner,
-//     repo,
-//     path,
-//     content,
-//   }: {
-//     owner: string;
-//     repo: string;
-//     path: string;
-//     content: string;
-//   }) => {
-//     const res = await instance.request(
-//       'PUT /repos/{owner}/{repo}/contents/{path}',
-//       {
-//         owner,
-//         repo,
-//         path,
-//         message: 'image commit',
-//         content,
-//       }
-//     );
-//     return res.data.content?.path;
-//   },
-// });
+  let urls: IUrl[] = [];
+
+  if (Array.isArray(data)) {
+    urls = data.map(({ path, sha }) => ({
+      fullPath: `${CDN_URL}/${username}/${repo}/${path}`,
+      originPath: path,
+      sha,
+    }));
+  }
+
+  if (Object.keys(urls).length !== 0 && !Array.isArray(data)) {
+    const { path, sha } = data;
+    urls = [
+      {
+        fullPath: `${CDN_URL}/${username}/${repo}/${path}`,
+        originPath: path,
+        sha,
+      },
+    ];
+  }
+
+  return urls;
+};
+
+export const deleteFile = async (
+  instance: Octokit,
+  username: string,
+  repo: string,
+  url: string,
+  sha: string
+) => {
+  try {
+    await instance.request('DELETE /repos/{owner}/{repo}/contents/{path}', {
+      owner: username,
+      repo,
+      path: url,
+      message: 'delete file',
+      sha,
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
