@@ -15,7 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onLanguage:markdown"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -31,13 +31,13 @@
         "category": "markdown"
       },
       {
-        "command": "test",
-        "title": "Markdown test",
+        "command": "markdown-image-preview",
+        "title": "Markdown Image Preview",
         "category": "markdown"
       },
       {
-        "command": "markdown-image-preview",
-        "title": "Markdown Image Preview",
+        "command": "markdown-image-paste",
+        "title": "Markdown Image Paste",
         "category": "markdown"
       }
     ],
@@ -47,6 +47,11 @@
           "command": "upload-image",
           "group": "group1",
           "when": "editorHasSelection"
+        },
+        {
+          "command": "markdown-image-paste",
+          "group": "group1",
+          "when": "editorTextFocus && editorLangId == 'markdown'"
         }
       ]
     }
@@ -78,6 +83,7 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "glob": "^8.0.1",
     "octokit": "^1.7.1"
   }
 }
