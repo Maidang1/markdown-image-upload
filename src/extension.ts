@@ -4,8 +4,16 @@ import { uploadImageCommand } from '././commands/upload-image';
 import { markdownImagePreviewCommand } from './commands/image-preview';
 import { markdownSettingCommand } from './commands/markdown-settings';
 import { markdownImagePasteCommand } from './commands/image-paste';
+import { CodelensProvider } from './providers/CodelensProvider.ts';
 
 export function activate(context: vscode.ExtensionContext) {
+  const codelensProvider = new CodelensProvider();
+  vscode.languages.registerCodeLensProvider(
+    {
+      language: 'markdown',
+    },
+    codelensProvider
+  );
   const commands = [
     uploadImageCommand,
     markdownImagePreviewCommand,

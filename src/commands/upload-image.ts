@@ -5,7 +5,7 @@ import { createInstance } from '../utils/request';
 export const uploadImageCommand = (context: vscode.ExtensionContext) => {
   return [
     'upload-image',
-    async () => {
+    async (...args: any) => {
       const activeTextEditor = vscode.window.activeTextEditor;
       const username = context.globalState.get('username') as string;
       const repo = context.globalState.get('repo') as string;
@@ -13,7 +13,13 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
       const instance = createInstance(token);
       if (activeTextEditor) {
         const { document, selection, edit } = activeTextEditor;
-        const text = document.getText(selection);
+        let text;
+        const [hasCodeLen, url, range] = args;
+        if (hasCodeLen) {
+          text = url;
+        } else {
+          text = document.getText(selection);
+        }
         // 判断选中的链接是不是图片
         if (checkIsImg(text)) {
           let content = await imagePathToBase64(text);
@@ -32,15 +38,25 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
                   content,
                 }
               );
-              // return res.data.content?.path;
-              edit((editBuilder) => {
-                if (res.data.content?.path) {
-                  editBuilder.replace(
-                    selection,
-                    `${CDN_URL}/${username}/${repo}/${res.data.content.path}`
-                  );
-                }
-              });
+              if (hasCodeLen) {
+                edit((editBuilder) => {
+                  if (res.data.content?.path) {
+                    editBuilder.replace(
+                      range,
+                      `(${CDN_URL}/${username}/${repo}/${res.data.content.path})`
+                    );
+                  }
+                });
+              } else {
+                edit((editBuilder) => {
+                  if (res.data.content?.path) {
+                    editBuilder.replace(
+                      selection,
+                      `${CDN_URL}/${username}/${repo}/${res.data.content.path}`
+                    );
+                  }
+                });
+              }
             } catch (e: any) {
               vscode.window.showErrorMessage(e);
             }

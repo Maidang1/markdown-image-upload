@@ -45,7 +45,7 @@
       "editor/context": [
         {
           "command": "upload-image",
-          "group": "group1",
+          "group": "1_modification",
           "when": "editorHasSelection"
         },
         {
