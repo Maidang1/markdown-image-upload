@@ -1,11 +1,3 @@
-# Change Log
-
-All notable changes to the "markdown-image-upload" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
 ## [0.0.1] - 2022-05-07
 
 ### Add
@@ -18,3 +10,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Add
 
 - image preview
+
+## [0.0.3] - 2022-05-09
+
+### Add
+
+- 截屏功能
+
+## [0.0.4] - 2022-05-12
+
+### Add
+
+- 点击 upload image 就可以上传图片
