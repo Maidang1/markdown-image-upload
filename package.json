@@ -54,7 +54,39 @@
           "when": "editorTextFocus && editorLangId == 'markdown'"
         }
       ]
-    }
+    },
+    "configuration": [
+      {
+        "title": "Markdown Image Upload",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Github username",
+            "default": ""
+          },
+          "repo": {
+            "type": "string",
+            "description": "Github repository name",
+            "default": ""
+          },
+          "token": {
+            "type": "string",
+            "description": "Github token",
+            "default": ""
+          },
+          "auto_delete": {
+            "type": "boolean",
+            "default": false,
+            "description": "Auto delete image after upload"
+          },
+          "enable_settings": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable markdown image upload setting if not default command you input"
+          }
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",

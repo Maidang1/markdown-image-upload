@@ -149,3 +149,17 @@ export const insertImageLocal = (
     textEditorEdit.insert(editor.selection.active, img);
   });
 };
+
+// ensure absolute path
+export const ensureAbsolutePath = (filePath: string) => {
+  if (path.isAbsolute(filePath)) {
+    return filePath;
+  }
+  const activeTextEditor = vscode.window.activeTextEditor;
+  if (activeTextEditor) {
+    const { document } = activeTextEditor;
+    const folderPath = path.dirname(document.fileName);
+    return path.join(folderPath, filePath);
+  }
+  return '';
+};

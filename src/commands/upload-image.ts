@@ -1,15 +1,36 @@
 import * as vscode from 'vscode';
 import { CDN_URL } from '../const';
-import { checkIsImg, getFileName, imagePathToBase64 } from '../utils';
+import {
+  checkIsImg,
+  ensureAbsolutePath,
+  getFileName,
+  imagePathToBase64,
+} from '../utils';
 import { createInstance } from '../utils/request';
+import * as fs from 'fs';
 export const uploadImageCommand = (context: vscode.ExtensionContext) => {
   return [
     'upload-image',
     async (...args: any) => {
       const activeTextEditor = vscode.window.activeTextEditor;
-      const username = context.globalState.get('username') as string;
-      const repo = context.globalState.get('repo') as string;
-      const token = context.globalState.get('token') as string;
+      const enableSettings =
+        vscode.workspace.getConfiguration('enable_settings');
+
+      const username = (
+        !enableSettings
+          ? context.globalState.get('username')
+          : vscode.workspace.getConfiguration('username')
+      ) as string;
+      const repo = (
+        !enableSettings
+          ? context.globalState.get('repo')
+          : vscode.workspace.getConfiguration('repo')
+      ) as string;
+      const token = (
+        !enableSettings
+          ? context.globalState.get('token')
+          : vscode.workspace.getConfiguration('token')
+      ) as string;
       const instance = createInstance(token);
       if (activeTextEditor) {
         const { document, selection, edit } = activeTextEditor;
@@ -20,6 +41,7 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
         } else {
           text = document.getText(selection);
         }
+        text = ensureAbsolutePath(text);
         // 判断选中的链接是不是图片
         if (checkIsImg(text)) {
           let content = await imagePathToBase64(text);
@@ -57,6 +79,9 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
                   }
                 });
               }
+              const isAutoDelete =
+                vscode.workspace.getConfiguration('auto_delete');
+              isAutoDelete && fs.rm(content, () => {});
             } catch (e: any) {
               vscode.window.showErrorMessage(e);
             }

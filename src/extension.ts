@@ -5,6 +5,7 @@ import { markdownImagePreviewCommand } from './commands/image-preview';
 import { markdownSettingCommand } from './commands/markdown-settings';
 import { markdownImagePasteCommand } from './commands/image-paste';
 import { CodelensProvider } from './providers/CodelensProvider.ts';
+import { ensureAbsolutePath } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
   const codelensProvider = new CodelensProvider();
