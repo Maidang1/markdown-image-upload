@@ -39,6 +39,11 @@
         "command": "markdown-image-paste",
         "title": "Markdown Image Paste",
         "category": "markdown"
+      },
+      {
+        "command": "markdown-local-insert",
+        "title": "Markdown Local Insert",
+        "category": "markdown"
       }
     ],
     "menus": {
@@ -55,6 +60,14 @@
         }
       ]
     },
+    "keybindings": [
+      {
+        "command": "markdown-local-insert",
+        "key": "Ctrl+Shift+U",
+        "mac": "cmd+Shift+U",
+        "when": "editorTextFocus && editorLangId == 'markdown'"
+      }
+    ],
     "configuration": [
       {
         "title": "Markdown Image Upload",

@@ -4,8 +4,8 @@ import { uploadImageCommand } from '././commands/upload-image';
 import { markdownImagePreviewCommand } from './commands/image-preview';
 import { markdownSettingCommand } from './commands/markdown-settings';
 import { markdownImagePasteCommand } from './commands/image-paste';
+import { markdownImageInsertCommand } from './commands/local-insert';
 import { CodelensProvider } from './providers/CodelensProvider.ts';
-import { ensureAbsolutePath } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
   const codelensProvider = new CodelensProvider();
@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     markdownImagePreviewCommand,
     markdownSettingCommand,
     markdownImagePasteCommand,
+    markdownImageInsertCommand,
   ];
   commands.forEach((command) => {
     const [name, callback] = command(context);
