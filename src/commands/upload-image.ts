@@ -13,23 +13,24 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
     'upload-image',
     async (...args: any) => {
       const activeTextEditor = vscode.window.activeTextEditor;
-      const enableSettings =
-        vscode.workspace.getConfiguration('enable_settings');
+      const enableSettings = vscode.workspace
+        .getConfiguration()
+        .get('enable_settings');
 
       const username = (
         !enableSettings
           ? context.globalState.get('username')
-          : vscode.workspace.getConfiguration('username')
+          : vscode.workspace.getConfiguration().get('username')
       ) as string;
       const repo = (
         !enableSettings
           ? context.globalState.get('repo')
-          : vscode.workspace.getConfiguration('repo')
+          : vscode.workspace.getConfiguration().get('repo')
       ) as string;
       const token = (
         !enableSettings
           ? context.globalState.get('token')
-          : vscode.workspace.getConfiguration('token')
+          : vscode.workspace.getConfiguration().get('token')
       ) as string;
       const instance = createInstance(token);
       if (activeTextEditor) {
@@ -79,9 +80,17 @@ export const uploadImageCommand = (context: vscode.ExtensionContext) => {
                   }
                 });
               }
-              const isAutoDelete =
-                vscode.workspace.getConfiguration('auto_delete');
-              isAutoDelete && fs.rm(content, () => {});
+              const isAutoDelete = vscode.workspace
+                .getConfiguration()
+                .get('auto_delete');
+              if (isAutoDelete) {
+                fs.rm(text, (err) => {
+                  if (err) {
+                    vscode.window.showErrorMessage('图片自动删除失败');
+                  }
+                  vscode.window.showInformationMessage('图片自动删除成功');
+                });
+              }
             } catch (e: any) {
               vscode.window.showErrorMessage(e);
             }
